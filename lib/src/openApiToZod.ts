@@ -380,7 +380,12 @@ const getZodChainableStringValidations = (schema: SchemaObject) => {
 
     if (!schema.enum) {
         if (schema.minLength !== undefined) {
-            validations.push(`min(${schema.minLength})`);
+            const minMsg = schema.json_schema_extra?.errorMessage?.minLength;
+            validations.push(
+                `min(${schema.minLength}, { message: ${JSON.stringify(
+                    minMsg ?? `Має бути щонайменше ${schema.minLength} символів`
+                )} })`
+            );
         }
 
         if (schema.maxLength !== undefined) {
